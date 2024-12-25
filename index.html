@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PVT Web</title>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: black;
+            font-family: Arial, sans-serif;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .center-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 80%;
+            padding: 20px;
+            border: 3px solid lime;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 10px lime, 0 0 20px lime, 0 0 30px lime;
+        }
+
+        .glowing-text {
+            color: white;
+            text-align: center;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px purple, 0 0 20px purple, 0 0 30px purple;
+        }
+
+        .button {
+            background-color: red;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            box-shadow: 0 0 10px red, 0 0 20px red;
+        }
+
+        .list-view {
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid white;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .textview {
+            font-size: 1.5rem;
+            margin-top: 10px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="center-container">
+        <div class="glowing-text">WELCOME TO PVT WEB</div>
+        <div id="textview1" class="textview"></div>
+        <div id="textview2" class="textview"></div>
+        <button class="button" id="check-update">Check Update</button>
+        <div id="listview" class="list-view"></div>
+    </div>
+
+    <script>
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 100 },
+                color: { value: "#00ff00" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5 },
+                size: { value: 5 },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#00ff00",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    out_mode: "out"
+                }
+            }
+        });
+
+        // Timer functionality
+        const textview1 = document.getElementById("textview1");
+        const textview2 = document.getElementById("textview2");
+        const checkUpdateBtn = document.getElementById("check-update");
+        const listview = document.getElementById("listview");
+
+        const timer = setInterval(() => {
+            const calendar = new Date();
+            const seconds = calendar.getSeconds();
+            const remainingSeconds = 60 - seconds;
+
+            const currentHour = calendar.getHours();
+            const currentMinute = calendar.getMinutes();
+
+            const startHour = 5;
+            const startMinute = 29;
+
+            let elapsedMinutes = (currentHour * 60 + currentMinute) - (startHour * 60 + startMinute);
+
+            if (elapsedMinutes < 0) elapsedMinutes = 0;
+
+            const formattedDate = calendar.toISOString().slice(0, 10).replace(/-/g, "");
+            const periodNumber = "100001" + elapsedMinutes.toString().padStart(4, "0");
+
+            textview1.innerText = formattedDate + periodNumber;
+            textview2.innerText = `00:${remainingSeconds.toString().padStart(2, "0")}`;
+        }, 1000);
+
+        const results = ["BIG 4", "BIG 3", "BIG 2", "BIG 1", "BIG 0", "SMALL 9", "SMALL 8", "SMALL 7", "SMALL 6", "SMALL 5"];
+        let lastUpdate = null;
+
+        checkUpdateBtn.addEventListener("click", () => {
+            const currentText = textview1.innerText;
+            if (currentText === lastUpdate) {
+                listview.innerText = "Please wait for the next period.";
+            } else {
+                lastUpdate = currentText;
+                const randomResult = results[Math.floor(Math.random() * results.length)];
+                listview.innerText = `Result: ${randomResult}`;
+            }
+        });
+    </script>
+</body>
+</html>
